@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#app {
+    max-width: 400px;
+    margin: 50px auto;
+}
+
+button {
+    margin-top: 10px;
+}
+
+.completed {
+    text-decoration: line-through;
+}
