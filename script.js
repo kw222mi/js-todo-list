@@ -36,25 +36,28 @@ form.addEventListener("submit", (event) => {
      }
 
      const deleteButton = document.createElement("button")
-     deleteButton.textContent = "Delete"
+     deleteButton.innerHTML = `<span class="material-symbols-outlined">delete</span>`
      deleteButton.onclick = () => deleteTodo(index)
 
      const completeButton = document.createElement("button")
-     completeButton.textContent = todo.completed ? "Undo" : "Complete"
+     completeButton.innerHTML = todo.completed
+       ? `<span class="material-symbols-outlined">undo</span>`
+       : `<span class="material-symbols-outlined">done</span>`
      completeButton.onclick = () => toggleComplete(index)
 
       const moveUpButton = document.createElement("button")
-      moveUpButton.textContent = "Move Uo"
+      moveUpButton.innerHTML = `<span class="material-symbols-outlined">arrow_upward</span>`
       moveUpButton.onclick = () => moveUp(index)
 
        const moveDownButton = document.createElement("button")
-       moveDownButton.textContent = "Move Down"
+       moveDownButton.innerHTML = `<span class="material-symbols-outlined">arrow_downward</span>`
        moveDownButton.onclick = () => moveDown(index)
 
-     listItem.appendChild(deleteButton)
-     listItem.appendChild(completeButton)
-     listItem.appendChild(moveUpButton)
-     listItem.appendChild(moveDownButton)
+    listItem.appendChild(moveUpButton)
+    listItem.appendChild(moveDownButton)
+    listItem.appendChild(completeButton)
+    listItem.appendChild(deleteButton)
+    
 
      todoList.appendChild(listItem)
    })
