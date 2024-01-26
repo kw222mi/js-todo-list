@@ -10,15 +10,19 @@ form.addEventListener("submit", (event) => {
  onSubmit = (event) => {
     event.preventDefault()
     let newTodoText = event.target[0].value.trim()
+    let newAuthor = event.target[1].value.trim();
+    
     
     if (newTodoText !== "") {
       const newTodo = {
         text: newTodoText,
         completed: false,
+        author: newAuthor,
       }
 
       todos.push(newTodo)
       newTodoInput.value = ""
+      author.value = ""
       renderTodos()
     }
 } 
@@ -34,6 +38,8 @@ form.addEventListener("submit", (event) => {
      if (todo.completed) {
        listItem.classList.add("completed")
      }
+
+     // let timeStamp = new Date().getTime()
 
      const deleteButton = document.createElement("button")
      deleteButton.innerHTML = `<span class="material-symbols-outlined">delete</span>`
@@ -53,10 +59,14 @@ form.addEventListener("submit", (event) => {
        moveDownButton.innerHTML = `<span class="material-symbols-outlined">arrow_downward</span>`
        moveDownButton.onclick = () => moveDown(index)
 
+       const author = document.createElement('span')
+       author.innerText = todo.author
+
     listItem.appendChild(moveUpButton)
     listItem.appendChild(moveDownButton)
     listItem.appendChild(completeButton)
     listItem.appendChild(deleteButton)
+    listItem.appendChild(author)
     
 
      todoList.appendChild(listItem)

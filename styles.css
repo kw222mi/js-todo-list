@@ -29,14 +29,19 @@ h1{
     width: 100px;
 }
 
-#newTodoInput {
+#newTodoInput,
+#author {
     padding: 10px;
     border-radius: 5px;
-    width: 225px;
+    width: 300px;
 }
 
 form {
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
 }
 
 ul{
