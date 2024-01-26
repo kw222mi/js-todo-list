@@ -8,9 +8,10 @@ form.addEventListener("submit", (event) => {
 
 onSubmit = (event) => {
   event.preventDefault();
-  const newTodoText = event.target[0].value.trim();
-  const newAuthor = event.target[1].value.trim();
-  let timeStamp = getTimeStamp();
+ const newTodoText = event.target[0] ? event.target[0].value.trim() : "";
+ const newAuthor = event.target[1] ? event.target[1].value.trim() : "";
+
+  const timeStamp = getTimeStamp();
 
   if (newTodoText !== "") {
     const newTodo = {
@@ -44,13 +45,21 @@ function renderTodos() {
 }
 
 function deleteTodo(index) {
-  todos.splice(index, 1);
-  renderTodos();
+  if (index >= 0 && index < todos.length) {
+    todos.splice(index, 1);
+    renderTodos();
+  } else {
+    console.error("Invalid index for deleteTodo:", index);
+  }
 }
 
 function toggleComplete(index) {
-  todos[index].completed = !todos[index].completed;
-  renderTodos();
+  if (index >= 0 && index < todos.length) {
+    todos[index].completed = !todos[index].completed;
+    renderTodos();
+  } else {
+    console.error("Invalid index for toggleComplete:", index);
+  }
 }
 
 function moveUp(index) {
@@ -70,7 +79,6 @@ function moveDown(index) {
     todos[index] = todos[index + 1];
     todos[index + 1] = temp;
   }
-
   renderTodos();
 }
 
@@ -79,17 +87,19 @@ function editTodo(index) {
     "Please enter a new text for the todo",
     `${todos[index].text}`
   );
-  todos[index].text = newText;
-  renderTodos();
+
+  if (newText !== null) {
+    todos[index].text = newText;
+    renderTodos();
+  }
 }
 
-function getTimeStamp() {
+const getTimeStamp = () => {
   let time = new Date().toISOString().split("T")[0];
   return time;
-}
+};
 
 function sortArrayByAuthor () {
-
     function compare(a, b) {
       if (a.author < b.author) {
         return -1;
@@ -101,7 +111,6 @@ function sortArrayByAuthor () {
     }
 
     let sortedArray = todos.sort(compare);
-
     todos = sortedArray
     renderTodos();
 }
@@ -118,7 +127,6 @@ function sortArrayByDate() {
   }
 
   let sortedArray = todos.sort(compare);
-
   todos = sortedArray;
   renderTodos();
 }
