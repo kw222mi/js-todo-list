@@ -1,5 +1,6 @@
 let todos = [];
 const form = document.querySelector("#form");
+let listItem;
 
 form.addEventListener("submit", (event) => {
   onSubmit(event);
@@ -7,8 +8,8 @@ form.addEventListener("submit", (event) => {
 
 onSubmit = (event) => {
   event.preventDefault();
-  let newTodoText = event.target[0].value.trim();
-  let newAuthor = event.target[1].value.trim();
+  const newTodoText = event.target[0].value.trim();
+  const newAuthor = event.target[1].value.trim();
   let timeStamp = getTimeStamp();
 
   if (newTodoText !== "") {
@@ -31,62 +32,14 @@ function renderTodos() {
   todoList.innerHTML = "";
 
   todos.forEach((todo, index) => {
-    const listItem = document.createElement("li");
-    // listItem.textContent = todo.text;
-
-    const todoText = document.createElement("span");
-    todoText.textContent = todo.text;
-    listItem.appendChild(todoText);
-    todoText.setAttribute("id", "todo-text");
+    let newListItem = createTodoListItem(todo, index);
 
     if (todo.completed) {
-      listItem.classList.add("completed");
+      newListItem.classList.add("completed");
     }
 
-    const deleteButton = document.createElement("button");
-    deleteButton.innerHTML = `<span class="material-symbols-outlined">delete</span>`;
-    deleteButton.setAttribute("id", "delete");
-    deleteButton.onclick = () => deleteTodo(index);
-
-    const completeButton = document.createElement("button");
-    completeButton.innerHTML = todo.completed
-      ? `<span class="material-symbols-outlined">undo</span>`
-      : `<span class="material-symbols-outlined">done</span>`;
-    completeButton.setAttribute("id", "complete");
-    completeButton.onclick = () => toggleComplete(index);
-
-    const moveUpButton = document.createElement("button");
-    moveUpButton.innerHTML = `<span class="material-symbols-outlined">arrow_upward</span>`;
-    moveUpButton.setAttribute("id", "move-up");
-    moveUpButton.onclick = () => moveUp(index);
-
-    const moveDownButton = document.createElement("button");
-    moveDownButton.innerHTML = `<span class="material-symbols-outlined">arrow_downward</span>`;
-    moveDownButton.setAttribute("id", "move-down");
-    moveDownButton.onclick = () => moveDown(index);
-
-    const editButton = document.createElement("button");
-    editButton.innerHTML = `<span class="material-symbols-outlined">edit</span>`;
-    editButton.setAttribute("id", "edit");
-    editButton.onclick = () => sortArray();
-
-    const author = document.createElement("span");
-    author.setAttribute("id", "author");
-    author.innerText = `Author: ${todo.author}`;
-
-    const timeStamp = document.createElement("span");
-    timeStamp.setAttribute("id", "time-stamp");
-    timeStamp.innerText = `Created: ${todo.time}`;
-
-    listItem.appendChild(moveUpButton);
-    listItem.appendChild(moveDownButton);
-    listItem.appendChild(completeButton);
-    listItem.appendChild(deleteButton);
-    listItem.appendChild(editButton);
-    listItem.appendChild(author);
-    listItem.appendChild(timeStamp);
-
-    todoList.appendChild(listItem);
+    todoList.appendChild(newListItem);
+    addEventListeners(index);
   });
 }
 
@@ -169,3 +122,48 @@ function sortArrayByDate() {
   todos = sortedArray;
   renderTodos();
 }
+
+
+function createTodoListItem(todo, index) {
+  let listItem = document.createElement("li");
+  listItem.classList.add("todo-item");
+
+  listItem.innerHTML = `
+    <span class="todo-text" id="todo-text-${index}">${todo.text}</span>
+    <button id="delete-${index}" class="delete-btn"><span class="material-symbols-outlined">delete</span></button>
+    <button id="complete-${index}" class="complete-btn"><span class="material-symbols-outlined">${
+    todo.completed ? "undo" : "done"
+  }</span></button>
+    <button id="move-up-${index}" class="move-up-btn"><span class="material-symbols-outlined">arrow_upward</span></button>
+    <button id="move-down-${index}" class="move-down-btn"><span class="material-symbols-outlined">arrow_downward</span></button>
+    <button id="edit-${index}" class="edit-btn"><span class="material-symbols-outlined">edit</span></button>
+    <span id="author-${index}" class="author">Author: ${todo.author}</span>
+    <span id="time-stamp-${index}" class="time-stamp">Created: ${
+    todo.time
+  }</span>
+  `;
+
+  return listItem;
+}
+
+
+
+ function addEventListeners(index) {
+   let deleteButton = document.getElementById(`delete-${index}`);
+   deleteButton.onclick = () => deleteTodo(index);
+
+   let completeButton = document.getElementById(`complete-${index}`);
+   completeButton.onclick = () => toggleComplete(index);
+
+   let moveUpButton = document.getElementById(`move-up-${index}`);
+   moveUpButton.onclick = () => moveUp(index);
+
+   let moveDownButton = document.getElementById(`move-down-${index}`);
+   moveDownButton.onclick = () => moveDown(index);
+
+   let editButton = document.getElementById(`edit-${index}`);
+   editButton.onclick = () => editTodo(index);
+ }
+
+
+
